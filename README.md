@@ -10,7 +10,7 @@
 
 ## Description
 
-GitGot is a semi-automated learning tool to empower users to rapidly search through troves of public data on GitHub for sensitive secrets. 
+GitGot is a semi-automated, feedback-driven tool to empower users to rapidly search through troves of public data on GitHub for sensitive secrets. 
 
 <p align="center">
   <img src="example_usage.png" width=80%/>
@@ -56,6 +56,9 @@ After adding the token, you are ready to go:
 # Query for the string "example.com" using the default RegEx list and logfile location (/logs/<query>.log)
 ./gitgot.py -q example.com
 
+# Using GitHub advanced search syntax
+./gitgot.py -q "org:github cats"
+
 # Custom RegEx List and custom log files location
 ./gitgot.py -q example.com -f checks/default.list -o example1.log
 
@@ -65,8 +68,11 @@ After adding the token, you are ready to go:
 # Using an existing session (w/blacklists) for a new query
 ./gitgot.py -q "Example Org" -r example.com.state
 ```
+### Query Syntax
 
-## UI Commands
+GitGot queries are fed directly into the GitHub code search API, so check out [GitHub's documentation](https://help.github.com/en/articles/searching-code) for more advanced query syntax.
+
+### UI Commands
 * **Ignore similar [c]ontent:** Blacklists a fuzzy hash of the file contents to ignore
 future results that are similar to the selected file
 * **Ignore [r]epo/[u]ser/[f]ilename:** Ignores future results by blacklisting selected strings
