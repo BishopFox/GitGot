@@ -285,7 +285,7 @@ def regex_validator(args, state):
                         "a capture group for matches:\n\t" + str(e))
                 sys.exit(-1)
             state.checks.append(line)
-    state.checks.append("((?i)" + state.query + ")")
+    state.checks.append("(?i)(" + state.query + ")")
     return state
 
 
@@ -359,6 +359,7 @@ def main():
     state = regex_validator(args, state)
 
     api_request_loop(state)
+
 
 if __name__ == "__main__":
     main()
