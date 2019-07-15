@@ -76,8 +76,8 @@ GitGot queries are fed directly into the GitHub code search API, so check out [G
 * **Ignore similar [c]ontent:** Blacklists a fuzzy hash of the file contents to ignore
 future results that are similar to the selected file
 * **Ignore [r]epo/[u]ser/[f]ilename:** Ignores future results by blacklisting selected strings
-* **Search [/(mykeyword)]:** Provides a custom regex expression with a capture group to searches on-the-fly (e.g., `/(secretToken)`)
-* **[a]dd to Log:** Add RegEx matches to log file, including all on-the-fly search results from search command
+* **Search [/mykeyword]:** Provide a custom regex expression to perfrom searches on-the-fly (e.g., `/secrettoken`)
+* **[a]dd to Log:** Add RegEx matches to log file (including all on-the-fly search results from search command)
 * **Next[\<Enter\>], [b]ack:** Advances through search results, or returns to previous results
 * **[s]ave state:** Saves the blacklists and progress in the search results from the session
 * **[q]uit:** Quit

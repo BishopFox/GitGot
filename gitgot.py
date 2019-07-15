@@ -136,7 +136,7 @@ def input_handler(state):
         bcolors.WARNING + "[f]ilename" +
         bcolors.HEADER +
         ", [p]rint contents, [s]ave state, [a]dd to log, "
-        "search [/(findme)], [b]ack, [q]uit, next [<Enter>]===: " +
+        "search [/<query>], [b]ack, [q]uit, next [<Enter>]===: " +
         bcolors.ENDC)
 
 
@@ -149,16 +149,12 @@ def pagination_hack(repositories, state):
 
 
 def regex_handler(choice, repo):
-    if choice[1] != "(" or choice[-1] != ")":
-        print(
-            bcolors.FAIL +
-            "Regex requires at least one group reference: "
-            "e.g., (CaSeSensitive) or ((?i)insensitive)" +
-            bcolors.ENDC)
-        return ""
-    else:
-        print(bcolors.HEADER + "Searching: " + choice[1:] + bcolors.ENDC)
-        return regex_search([choice[1:]], repo)
+    query = choice[1:]
+    if query[0] != "(" and query[-1] != ")":
+        query = r"(?i)({})".format(query)
+
+    print(bcolors.HEADER + "Searching: " + query + bcolors.ENDC)
+    return regex_search([query], repo)
 
 
 def ui_loop(repo, repositories, log_buf, state):
