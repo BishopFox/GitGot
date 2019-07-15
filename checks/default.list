@@ -2,15 +2,15 @@
 (127\.([0-9\.]{1,3}){3}|10\.([0-9\.]{1,3}){3}|172\.[123][0-9]\.([0-9\.]{1,3}){2}|192\.168\.([0-9\.]{1,3}){2})
 
 # Keywords
-((?i)secret)
-((?i)key)
-((?i)token)
-((?i)password)
-((?i)jdbc)
+(?i)(secret)
+(?i)(key)
+(?i)(token)
+(?i)(password)
+(?i)(jdbc)
 
 
 # Private Keys
-((?s)-----BEGIN (RSA|DSA|PGP|EC|) PRIVATE KEY.*END (RSA|DSA|PGP|EC|) PRIVATE KEY-----)
+(?s)(-----BEGIN (RSA|DSA|PGP|EC|) PRIVATE KEY.*END (RSA|DSA|PGP|EC|) PRIVATE KEY-----)
 
 ### From Truffle Hog Regex lists: https://github.com/dxa4481/truffleHogRegexes/
 
