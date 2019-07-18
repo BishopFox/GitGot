@@ -47,7 +47,7 @@ pip3 install -r requirements.txt
 
 ## Usage
 
-GitHub requires a token for rate-limiting purposes. Create a [GitHub API token]() with **no permissions/no scope**. This will be equivalent to public GitHub access, but it will allow access to use the GitHub Search API. Set this token at the top of `gitgot.py` as shown below:
+GitHub requires a token for rate-limiting purposes. Create a [GitHub API token](https://github.com/settings/tokens) with **no permissions/no scope**. This will be equivalent to public GitHub access, but it will allow access to use the GitHub Search API. Set this token at the top of `gitgot.py` as shown below:
 ```sh
 ACCESS_TOKEN = "<NO-PERMISSION-GITHUB-TOKEN-HERE>"
 ```
