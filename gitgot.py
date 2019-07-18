@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import time
 import github
 import json
 import re
@@ -238,8 +239,12 @@ def api_request_loop(state):
 
                     if should_parse(repo, state) or stepBack:
                         stepBack = False
-                        log_buf += regex_search(state.checks, repo)
-                        ui_loop(repo, repositories, log_buf, state)
+                        found = regex_search(state.checks, repo)
+                        if found != "":
+                            log_buf += found
+                            ui_loop(repo, repositories, log_buf, state)
+                        else:
+                            time.sleep(1)
                         if state.index < i:
                             i = state.index
                             stepBack = True
