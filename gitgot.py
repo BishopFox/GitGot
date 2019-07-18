@@ -285,7 +285,9 @@ def regex_validator(args, state):
                         "a capture group for matches:\n\t" + str(e))
                 sys.exit(-1)
             state.checks.append(line)
-    state.checks.append("(?i)(" + state.query + ")")
+
+    escaped_query = state.query.replace("(", "\\(").replace(")", "\\)")
+    state.checks.append("(?i)(" + escaped_query + ")")
     return state
 
 
