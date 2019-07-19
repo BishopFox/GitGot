@@ -98,16 +98,23 @@ def should_parse(repo, state):
         return False
 
     # Fuzzy Hash Comparison
-    candidate_sig = ssdeep.hash(repo.decoded_content)
-    for sig in state.bad_signatures:
-        similarity = ssdeep.compare(candidate_sig, sig)
-        if similarity > SIMILARITY_THRESHOLD:
-            print(
-                bcolors.FAIL +
-                "Failed check: Ignore Fuzzy Signature on Contents "
-                "({}% Similarity)".format(similarity) +
-                bcolors.ENDC)
-            return False
+    try:
+        candidate_sig = ssdeep.hash(repo.decoded_content)
+        for sig in state.bad_signatures:
+            similarity = ssdeep.compare(candidate_sig, sig)
+            if similarity > SIMILARITY_THRESHOLD:
+                print(
+                    bcolors.FAIL +
+                    "Failed check: Ignore Fuzzy Signature on Contents "
+                    "({}% Similarity)".format(similarity) +
+                    bcolors.ENDC)
+                return False
+    except github.UnknownObjectException:
+        print(
+            bcolors.FAIL +
+            "API Error: File no longer exists on github.com" +
+            bcolors.ENDC)
+        return False
     return True
 
 
