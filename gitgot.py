@@ -144,7 +144,7 @@ def pagination_hack(repositories, state):
     count = len(repositories.__dict__["_PaginatedListBase__elements"])
     if state.index >= count:
         n_elements = repositories.get_page(state.index//30)
-        repositories.__dict__["_PaginatedListBase__elements"] = n_elements
+        repositories.__dict__["_PaginatedListBase__elements"] += n_elements
     return repositories
 
 
