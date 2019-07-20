@@ -8,10 +8,11 @@ import sys
 import ssdeep
 import sre_constants
 import os.path
+import os
 
 
 SIMILARITY_THRESHOLD = 65
-ACCESS_TOKEN = "<NO-PERMISSION-GITHUB-TOKEN-HERE>"
+ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN", "")
 
 
 class bcolors:
@@ -336,7 +337,7 @@ def main():
     state = State()
     state.index = 0
 
-    if ACCESS_TOKEN == "<NO-PERMISSION-GITHUB-TOKEN-HERE>":
+    if ACCESS_TOKEN == "":
         print("Github Access token not set")
         sys.exit(1)
 
