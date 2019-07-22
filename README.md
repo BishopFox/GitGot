@@ -52,6 +52,8 @@ GitHub requires a token for rate-limiting purposes. Create a [GitHub API token](
 ACCESS_TOKEN = "<NO-PERMISSION-GITHUB-TOKEN-HERE>"
 ```
 
+(Alternatively, this token can be set as the `GITHUB_ACCESS_TOKEN` environment variable)
+
 After adding the token, you are ready to go:
 ```sh
 # Query for the string "example.com" using the default RegEx list and logfile location (/logs/<query>.log)
