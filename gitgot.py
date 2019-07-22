@@ -7,12 +7,12 @@ import re
 import sys
 import ssdeep
 import sre_constants
-import os.path
 import os
+import os.path
 
 
 SIMILARITY_THRESHOLD = 65
-ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN", "")
+ACCESS_TOKEN = "<NO-PERMISSION-GITHUB-TOKEN-HERE>"
 
 
 class bcolors:
@@ -300,6 +300,8 @@ def regex_validator(args, state):
 
 
 def main():
+    global ACCESS_TOKEN
+
     if sys.version_info < (3, 0):
         sys.stdout.write("Sorry, requires Python 3.x, not Python 2.x\n")
         sys.exit(1)
@@ -337,7 +339,10 @@ def main():
     state = State()
     state.index = 0
 
-    if ACCESS_TOKEN == "":
+    if ACCESS_TOKEN == "<NO-PERMISSION-GITHUB-TOKEN-HERE>":
+        ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", "")
+
+    if not ACCESS_TOKEN:
         print("Github Access token not set")
         sys.exit(1)
 
