@@ -9,6 +9,7 @@ import ssdeep
 import sre_constants
 import os
 import os.path
+import urllib.parse
 
 
 SIMILARITY_THRESHOLD = 65
@@ -100,8 +101,10 @@ def should_parse(repo, state):
 
     # Fuzzy Hash Comparison
     try:
-        # Temporary fix for PyGithub until fixed upstream
-        repo._url.value = repo._url.value.replace("#", "%23")
+        # Temporary fix for PyGithub until fixed upstream (PyGithub#1178)
+        repo._url.value = repo._url.value.replace(
+            repo._path.value,
+            urllib.parse.quote(repo._path.value))
 
         candidate_sig = ssdeep.hash(repo.decoded_content)
         for sig in state.bad_signatures:
