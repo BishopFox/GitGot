@@ -100,6 +100,9 @@ def should_parse(repo, state):
 
     # Fuzzy Hash Comparison
     try:
+        # Temporary fix for PyGithub until fixed upstream
+        repo._url.value = repo._url.value.replace("#", "%23")
+
         candidate_sig = ssdeep.hash(repo.decoded_content)
         for sig in state.bad_signatures:
             similarity = ssdeep.compare(candidate_sig, sig)
