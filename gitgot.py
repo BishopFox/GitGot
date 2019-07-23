@@ -15,7 +15,6 @@ import urllib.parse
 SIMILARITY_THRESHOLD = 65
 ACCESS_TOKEN = "<NO-PERMISSION-GITHUB-TOKEN-HERE>"
 
-
 class bcolors:
     """ Thank you Blender scripts :) """
     HEADER = '\033[95m'
@@ -285,7 +284,8 @@ def api_request_loop(state):
 
 
 def regex_validator(args, state):
-    with open(args.checks, "r") as fd:
+    ospath = os.path.dirname(os.path.realpath(__file__)) + '/'
+    with open(ospath + args.checks, "r") as fd:
         for line in fd.read().splitlines():
             if line.startswith("#") or len(line) == 0:
                 continue

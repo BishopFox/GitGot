@@ -45,6 +45,17 @@ For Windows or *nix distributions without the `ssdeep` package, please see the [
 pip3 install -r requirements.txt
 ```
 
+For docker, clone the repository and add a `secrets.env` file with your github access token binded to `GITHUB_ACCESS_TOKEN`. The file might look like this:
+```
+GITHUB_ACCESS_TOKEN=<MY-ACCESS-TOKEN>
+```
+
+Then edit the `CMD` at the bottom of the Dockerfile to be whatever you want to search for. Build and run with the following:
+```shell
+docker built -t gitgot:dev .
+docker run --env-file secrets.env -it gitgot:dev
+```
+
 ## Usage
 
 GitHub requires a token for rate-limiting purposes. Create a [GitHub API token](https://github.com/settings/tokens) with **no permissions/no scope**. This will be equivalent to public GitHub access, but it will allow access to use the GitHub Search API. Set this token at the top of `gitgot.py` as shown below:
