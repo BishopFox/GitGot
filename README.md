@@ -27,6 +27,8 @@ Read more about the semi-automated, human-in-the-loop design here: https://know.
 
 ## Install Instructions
 
+### Manual Instructions
+
 [1] Install the `ssdeep` dependency for fuzzy hashing.
 
 Ubuntu/Debian (or equivalent for your distro):
@@ -45,6 +47,17 @@ For Windows or *nix distributions without the `ssdeep` package, please see the [
 pip3 install -r requirements.txt
 ```
 
+### Docker Instructions
+
+Run `docker_run.sh` to build the GitGot docker image (if it doesn't already exist) and execute the dockerized version of the GitGot tool. 
+
+On invocation, `docker_run.sh` performs a bind mount of the GitGot project directory, which grants the container access to the storage directories (e.g., logs, checks, states):
+
+```sh
+./docker_run.sh -q example.com
+```
+
+(See `docker_run.sh` for specific docker commands)
 ## Usage
 
 GitHub requires a token for rate-limiting purposes. Create a [GitHub API token](https://github.com/settings/tokens) with **no permissions/no scope**. This will be equivalent to public GitHub access, but it will allow access to use the GitHub Search API. Set this token at the top of `gitgot.py` as shown below:
