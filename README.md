@@ -10,7 +10,7 @@
 
 ## Description
 
-GitGot is a semi-automated, feedback-driven tool to empower users to rapidly search through troves of public data on GitHub for sensitive secrets. 
+GitGot is a semi-automated, feedback-driven tool to empower users to rapidly search through troves of public data on GitHub for sensitive secrets.
 
 <p align="center">
   <img src="example_usage.png" width=80%/>
@@ -18,14 +18,16 @@ GitGot is a semi-automated, feedback-driven tool to empower users to rapidly sea
 
 ### How it Works
 
-During search sessions, users will provide feedback to GitGot about search results to ignore, and GitGot prunes the set of results. Users can blacklist files by filename, repository name, username, or a fuzzy match of the file contents. 
+During search sessions, users will provide feedback to GitGot about search results to ignore, and GitGot prunes the set of results. Users can blacklist files by filename, repository name, username, or a fuzzy match of the file contents.
 
-Blacklists generated from previous sessions can be saved and reused against similar queries (e.g., 
+Blacklists generated from previous sessions can be saved and reused against similar queries (e.g.,
 `example.com` v.s. `subdomain.example.com` v.s. `Example Org`). Sessions can also be paused and resumed at any time.
 
 Read more about the semi-automated, human-in-the-loop design here: https://know.bishopfox.com/blog/going-semi-automated-in-an-automated-world-using-human-in-the-loop-workflows-to-improve-our-security-tools
 
 ## Install Instructions
+
+### Manual Instructions
 
 [1] Install the `ssdeep` dependency for fuzzy hashing.
 
@@ -45,6 +47,17 @@ For Windows or *nix distributions without the `ssdeep` package, please see the [
 pip3 install -r requirements.txt
 ```
 
+### Docker Instructions
+
+Run `gitgot-docker.sh` to build the GitGot docker image (if it doesn't already exist) and execute the dockerized version of the GitGot tool.
+
+On invocation, `gitgot-docker.sh` will create and mount `logs` and `states` directories from the host's current working directory. If this `gitgot-docker.sh` is executed from the GitGot project directory it will update the docker container with changes to `gitgot.py` or `checks/`:
+
+```sh
+./gitgot-docker.sh -q example.com
+```
+
+(See `gitgot-docker.sh` for specific docker commands)
 ## Usage
 
 GitHub requires a token for rate-limiting purposes. Create a [GitHub API token](https://github.com/settings/tokens) with **no permissions/no scope**. This will be equivalent to public GitHub access, but it will allow access to use the GitHub Search API. Set this token at the top of `gitgot.py` as shown below:
