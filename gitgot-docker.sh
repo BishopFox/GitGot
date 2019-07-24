@@ -12,6 +12,9 @@ else
     echo "Not in project directory. Skipping container update/rebuild..."
 fi
 
+if [[ ! -d "logs" || ! -d "states" ]]; then
+    mkdir logs states
+fi
 
 docker run --rm -it \
     -e GITHUB_ACCESS_TOKEN=$GITHUB_ACCESS_TOKEN \
