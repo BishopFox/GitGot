@@ -59,7 +59,7 @@ class State:
         self.is_gist = is_gist
 
 
-def save_state(name, repositories, state):
+def save_state(name, state):
     filename = state.logfile.replace("log", "state")
     if name == "ratelimited":
         filename += ".ratelimited"
@@ -132,14 +132,14 @@ def should_parse(repo, state, is_gist=False):
 
 
 def print_handler(contents):
-        try:
-            contents = contents.decode('utf-8')
-        except AttributeError:
-            pass
-        finally:
-            print(contents)
-
+    try:
+        contents = contents.decode('utf-8')
+    except AttributeError:
+        pass
+    finally:
         print(contents)
+
+    print(contents)
 
 
 def input_handler(state, is_gist):
@@ -182,7 +182,7 @@ def regex_handler(choice, repo):
         return regex_search([choice[1:]], repo)
 
 
-def ui_loop(repo, repositories, log_buf, state, is_gist=False):
+def ui_loop(repo, log_buf, state, is_gist=False):
     choice = input_handler(state, is_gist)
 
     if choice == "c":
@@ -196,16 +196,16 @@ def ui_loop(repo, repositories, log_buf, state, is_gist=False):
         state.bad_files.append(repo.name)
     elif choice == "p":
         print_handler(repo.decoded_content)
-        ui_loop(repo, repositories, log_buf, state, is_gist)
+        ui_loop(repo, log_buf, state, is_gist)
     elif choice == "s":
-        save_state(state.query, repositories, state)
-        ui_loop(repo, repositories, log_buf, state, is_gist)
+        save_state(state.query, state)
+        ui_loop(repo, log_buf, state, is_gist)
     elif choice == "a":
         with open(state.logfile, "a") as fd:
             fd.write(log_buf)
     elif choice.startswith("/"):
         log_buf += regex_handler(choice, repo)
-        ui_loop(repo, repositories, log_buf, state, is_gist)
+        ui_loop(repo, log_buf, state, is_gist)
     elif choice == "b":
         if state.index - 1 < state.lastInitIndex:
             print(
@@ -213,7 +213,7 @@ def ui_loop(repo, repositories, log_buf, state, is_gist=False):
                 "Can't go backwards past restore point "
                 "because of rate-limiting/API limitations" +
                 bcolors.ENDC)
-            ui_loop(repo, repositories, log_buf, state, is_gist)
+            ui_loop(repo, log_buf, state, is_gist)
         else:
             state.index -= 2
     elif choice == "q":
@@ -272,7 +272,7 @@ def gist_search(g, state):
             if should_parse(gist, state, is_gist=True) or stepBack:
                 stepBack = False
                 log_buf += regex_search(state.checks, gist)
-                ui_loop(gist, None, log_buf, state, is_gist=True)
+                ui_loop(gist, log_buf, state, is_gist=True)
                 if state.index < i:
                     i = state.index
                     stepBack = True
@@ -322,7 +322,7 @@ def github_search(g, state):
                     if should_parse(repo, state) or stepBack:
                         stepBack = False
                         log_buf += regex_search(state.checks, repo)
-                        ui_loop(repo, repositories, log_buf, state)
+                        ui_loop(repo, log_buf, state)
                         if state.index < i:
                             i = state.index
                             stepBack = True
@@ -339,7 +339,7 @@ def github_search(g, state):
                             "Please wait about 30 seconds before you "
                             "try again, or exit (CTRL-C).\n " +
                             bcolors.ENDC)
-                        save_state("ratelimited", repositories, state)
+                        save_state("ratelimited", state)
                         input("Press enter to try again...")
                     except KeyboardInterrupt:
                         sys.exit(1)
@@ -349,7 +349,7 @@ def github_search(g, state):
             "RateLimitException: "
             "Please wait about 30 seconds before you try again.\n" +
             bcolors.ENDC)
-        save_state("ratelimited", repositories, state)
+        save_state("ratelimited", state)
         sys.exit(-1)
 
 
