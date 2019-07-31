@@ -234,7 +234,7 @@ def gist_fetch(query, page_idx, total_items=1000):
         gists = [x.get("href") for x in soup.findAll(
                             "a", class_="link-overlay")]
     except IndexError:
-        return {"data": None, "total_items": None}
+        return {"data": None, "total_items": 0}
 
     return {"data": gists, "total_items": total_items}
 
@@ -248,7 +248,10 @@ def gist_search(g, state):
         gists = gist_data["data"]
         state.totalCount = gist_data["total_items"]
 
-    print(bcolors.CLEAR)
+    if state.totalCount == 0:
+        print("No results found for query: {}".format(state.query))
+    else:
+        print(bcolors.CLEAR)
 
     i = state.index
     stepBack = False
@@ -384,9 +387,9 @@ def regex_validator(args, state):
                         "a capture group for matches:\n\t" + str(e))
                 sys.exit(-1)
             state.checks.append(line)
-
-    escaped_query = state.query.replace("(", "\\(").replace(")", "\\)")
-    state.checks.append("(?i)(" + escaped_query + ")")
+    for part in [state.query] + state.query.split():
+        escaped_query = part.replace("(", "\\(").replace(")", "\\)")
+        state.checks.append("(?i)(" + escaped_query + ")")
     return state
 
 
