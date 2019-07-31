@@ -225,14 +225,16 @@ def gist_fetch(query, page_idx, total_items=1000):
     query = urllib.parse.quote(query)
     gists = []
 
-    resp = requests.get(gist_url.format(query, page_idx))
-    soup = bs4.BeautifulSoup(resp.text, 'html.parser')
-    total_items = min(total_items,
-                      int([x.text.split()[0] for x in soup.find_all('h3')
-                           if "gist results" in x.text][0]))
-
-    gists = [x.get("href") for x in soup.findAll(
-                        "a", class_="link-overlay")]
+    try:
+        resp = requests.get(gist_url.format(query, page_idx))
+        soup = bs4.BeautifulSoup(resp.text, 'html.parser')
+        total_items = min(total_items, int(
+            [x.text.split()[0] for x in soup.find_all('h3')
+                if "gist results" in x.text][0].replace(',', '')))
+        gists = [x.get("href") for x in soup.findAll(
+                            "a", class_="link-overlay")]
+    except IndexError:
+        return {"data": None, "total_items": None}
 
     return {"data": gists, "total_items": total_items}
 
@@ -256,7 +258,21 @@ def gist_search(g, state):
 
             # Manual gist paginator
             if i >= len(gists):
-                gists.extend(gist_fetch(state.query, i // 10)["data"])
+                new_gists = gist_fetch(state.query, i // 10)["data"]
+                if not new_gists:
+                    try:
+                        print(
+                            bcolors.FAIL +
+                            "RateLimitException: "
+                            "Please wait about 30 seconds before you "
+                            "try again, or exit (CTRL-C).\n " +
+                            bcolors.ENDC)
+                        save_state("ratelimited", state)
+                        input("Press enter to try again...")
+                        continue
+                    except KeyboardInterrupt:
+                        sys.exit(1)
+                gists.extend(new_gists)
 
             gist = g.get_gist(gists[i].split("/")[-1])
             gist.decoded_content = "\n".join(
