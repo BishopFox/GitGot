@@ -72,6 +72,9 @@ After adding the token, you are ready to go:
 # Query for the string "example.com" using the default RegEx list and logfile location (/logs/<query>.log)
 ./gitgot.py -q example.com
 
+# Query through GitHub gists
+./gitgot.py --gist -q CompanyName
+
 # Using GitHub advanced search syntax
 ./gitgot.py -q "org:github cats"
 
