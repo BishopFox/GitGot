@@ -462,8 +462,8 @@ def main():
         state.logfile = args.output
     else:
         state.logfile = "logs/" + \
-            re.sub(r"[,.;@#?!&$/\\]+\ *", "_", args.query) + \
-            "_gist.log" if state.is_gist else ".log"
+            re.sub(r"[,.;@#?!&$/\\'\"]+\ *", "_", args.query)
+        state.logfile += "_gist.log" if state.is_gist else ".log"
 
     # Create default directories if they don't exist
     try:
