@@ -20,4 +20,4 @@ docker run --rm -it \
     -e GITHUB_ACCESS_TOKEN=$GITHUB_ACCESS_TOKEN \
     -v $PWD/logs:/gitgot/logs \
     -v $PWD/states:/gitgot/states \
-    gitgot $@
+    gitgot "$@"
