@@ -343,10 +343,10 @@ def github_search(g, state):
                     log_buf = "\n" + log_buf + "\n"
 
                     if should_parse(repo, state) or stepBack:
-                        name = len(log_buf)
+                        empty_log = len(log_buf)
                         stepBack = False
                         log_buf += regex_search(state.checks, repo)
-                        if state.skip == False or (state.skip == True and len(log_buf) is not name):
+                        if state.skip == False or (state.skip == True and len(log_buf) is not empty_log):
                             ui_loop(repo, log_buf, state)
                             if state.index < i:
                                 i = state.index
@@ -455,7 +455,6 @@ def main():
     args = parser.parse_args()
     state = State()
     state.index = 0
-#    state.skip = args.skip
     if ACCESS_TOKEN == "<NO-PERMISSION-GITHUB-TOKEN-HERE>":
         ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", "")
 
