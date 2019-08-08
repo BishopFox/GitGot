@@ -45,6 +45,8 @@ class State:
                  query=None,
                  logfile="",
                  is_gist=False,
+                 quiet=False,
+                 skip=False
                  ):
         self.bad_users = bad_users
         self.bad_repos = bad_repos
@@ -57,7 +59,8 @@ class State:
         self.query = query
         self.logfile = logfile
         self.is_gist = is_gist
-
+        self.quiet = quiet
+        self.skip = skip
 
 def save_state(name, state):
     filename = state.logfile.replace("log", "state")
@@ -108,6 +111,7 @@ def should_parse(repo, state, is_gist=False):
     try:
         if not is_gist:
             # Temporary fix for PyGithub until fixed upstream (PyGithub#1178)
+            
             repo._url.value = repo._url.value.replace(
                 repo._path.value,
                 urllib.parse.quote(repo._path.value))
@@ -339,13 +343,15 @@ def github_search(g, state):
                     log_buf = "\n" + log_buf + "\n"
 
                     if should_parse(repo, state) or stepBack:
+                        name = len(log_buf)
                         stepBack = False
                         log_buf += regex_search(state.checks, repo)
-                        ui_loop(repo, log_buf, state)
-                        if state.index < i:
-                            i = state.index
-                            stepBack = True
-                        print(bcolors.CLEAR)
+                        if state.skip == False or (state.skip == True and len(log_buf) is not name):
+                            ui_loop(repo, log_buf, state)
+                            if state.index < i:
+                                i = state.index
+                                stepBack = True
+                            print(bcolors.CLEAR)
                     else:
                         print("Skipping...")
                     i += 1
@@ -387,9 +393,10 @@ def regex_validator(args, state):
                         "a capture group for matches:\n\t" + str(e))
                 sys.exit(-1)
             state.checks.append(line)
-    for part in [state.query] + state.query.split():
-        escaped_query = part.replace("(", "\\(").replace(")", "\\)")
-        state.checks.append("(?i)(" + escaped_query + ")")
+    if(state.quiet is False):
+        for part in [state.query] + state.query.split():
+            escaped_query = part.replace("(", "\\(").replace(")", "\\)")
+            state.checks.append("(?i)(" + escaped_query + ")")
     return state
 
 
@@ -433,11 +440,22 @@ def main():
         "--recover",
         help="Name of recovery file",
         type=str)
-    args = parser.parse_args()
+    parser.add_argument(
+        "--quiet",
+        help="Do not match on the query search term",
+        action="store_true",
+        required=False)
+    parser.add_argument(
+        "-s",
+        "--skip",
+        help="skip queries that do not match on any checks",
+        action="store_true",
+        required=False)
 
+    args = parser.parse_args()
     state = State()
     state.index = 0
-
+#    state.skip = args.skip
     if ACCESS_TOKEN == "<NO-PERMISSION-GITHUB-TOKEN-HERE>":
         ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", "")
 
@@ -462,9 +480,10 @@ def main():
         state.logfile = args.output
     else:
         state.logfile = "logs/" + \
-            re.sub(r"[,.;@#?!&$/\\'\"]+\ *", "_", args.query)
-        state.logfile += "_gist.log" if state.is_gist else ".log"
-
+            re.sub(r"[,.;@#?!&$/\\]+\ *", "_", args.query) + \
+            "_gist.log" if state.is_gist else ".log"
+    state.quiet = args.quiet
+    state.skip = args.skip
     # Create default directories if they don't exist
     try:
         os.mkdir("logs")
