@@ -10,7 +10,7 @@
 
 
 # Private Keys
-(?s)(-----BEGIN (RSA|DSA|PGP|EC|) PRIVATE KEY.*END (RSA|DSA|PGP|EC|) PRIVATE KEY-----)
+(?s)(-----BEGIN (RSA|DSA|PGP|EC|) PRIVATE KEY.*END (RSA|DSA|PGP|EC|) PRIVATE KEY( BLOCK)?-----)
 
 ### From Truffle Hog Regex lists: https://github.com/dxa4481/truffleHogRegexes/
 
