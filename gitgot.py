@@ -425,7 +425,7 @@ def main():
         "--checks",
         help="List of RegEx checks (checks/default.list)",
         type=str,
-        default="checks/default.list")
+        default=os.path.dirname(os.path.realpath(__file__)) + "/checks/default.list")
     parser.add_argument(
         "-o",
         "--output",
