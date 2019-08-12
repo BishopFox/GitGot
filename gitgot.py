@@ -87,7 +87,10 @@ def regex_search(checks, repo):
                     print("\t", line)
                     break
             except Exception as e:
-                print(e)
+                print(
+                    bcolors.FAIL + "ERROR: ", e, bcolors.ENDC,
+                    bcolors.WARNING, "\nCHECK: ", check, bcolors.ENDC,
+                    "\nLINE: ", line)
     print(bcolors.HEADER + "End of Matches" + bcolors.ENDC)
     return output
 
