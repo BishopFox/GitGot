@@ -16,6 +16,9 @@ import urllib.parse
 
 SIMILARITY_THRESHOLD = 65
 ACCESS_TOKEN = "<NO-PERMISSION-GITHUB-TOKEN-HERE>"
+GITHUB_WHITESPACE = "\\.|,|:|;|/|\\\\|`|'|\"|=|\\*|!|\\?" \
+                    "|\\#|\\$|\\&|\\+|\\^|\\||\\~|<|>|\\(" \
+                    "|\\)|\\{|\\}|\\[|\\]| "
 
 
 class bcolors:
@@ -390,9 +393,16 @@ def regex_validator(args, state):
                         "a capture group for matches:\n\t" + str(e))
                 sys.exit(-1)
             state.checks.append(line)
-    for part in [state.query] + state.query.split():
-        escaped_query = part.replace("(", "\\(").replace(")", "\\)")
-        state.checks.append("(?i)(" + escaped_query + ")")
+
+    split = []
+    if not (state.query[0] == "\"" and state.query[-1] == "\""):
+        split = re.split(GITHUB_WHITESPACE, state.query)
+
+    for part in [state.query] + split:
+        if part:
+            escaped_query = re.escape(part) if split else \
+                part.replace("\"", "")
+            state.checks.append("(?i)(" + escaped_query + ")")
     return state
 
 
