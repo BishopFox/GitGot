@@ -69,8 +69,14 @@ ACCESS_TOKEN = "<NO-PERMISSION-GITHUB-TOKEN-HERE>"
 
 After adding the token, you are ready to go:
 ```sh
-# Query for the string "example.com" using the default RegEx list and logfile location (/logs/<query>.log)
+# Default RegEx list and logfile location (/logs/<query>.log) are used when no others are specified.
+
+# Query for the string "example.com" using default GitHub search behavior (i.e., tokenization). 
+# This will find com.example (e.g., Java) or example.com (Website)
 ./gitgot.py -q example.com
+
+# Query for the exact string "example.com". See Query Syntax in the next section for more details.
+./gitgot.py -q '"example.com"'
 
 # Query through GitHub gists
 ./gitgot.py --gist -q CompanyName
