@@ -446,6 +446,11 @@ def main():
         "--recover",
         help="Name of recovery file",
         type=str)
+    parser.add_argument(
+        "-u",
+        "--url",
+        help="URL of self hosted github endpoint (Example: https://example.com)",
+        type=str)
     args = parser.parse_args()
 
     state = State()
@@ -488,7 +493,10 @@ def main():
     # Load/Validate RegEx Checks
     state = regex_validator(args, state)
 
-    g = github.Github(ACCESS_TOKEN)
+    if args.url:
+        g = github.Github(base_url=args.url + "/api/v3", login_or_token=ACCESS_TOKEN)
+    else:
+        g = github.Github(ACCESS_TOKEN)
 
     if state.is_gist:
         gist_search(g, state)
