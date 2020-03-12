@@ -75,6 +75,9 @@ After adding the token, you are ready to go:
 # This will find com.example (e.g., Java) or example.com (Website)
 ./gitgot.py -q example.com
 
+# Query self-hosted GitHub instance
+./gitgot.py -q example.com -u https://git.example.com
+
 # Query for the exact string "example.com". See Query Syntax in the next section for more details.
 ./gitgot.py -q '"example.com"'
 
