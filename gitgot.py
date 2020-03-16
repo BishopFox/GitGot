@@ -128,12 +128,8 @@ def should_parse(repo, state, is_gist=False):
                     "({}% Similarity)".format(similarity) +
                     bcolors.ENDC)
                 return False
-    except github.UnknownObjectException:
-        print(
-            bcolors.FAIL +
-            "API Error: File no longer exists on github.com" +
-            bcolors.ENDC)
-        return False
+    except github.GithubException as e:
+        print(bcolors.FAIL + "API ERROR: " + e + bcolors.ENDC)
     return True
 
 
