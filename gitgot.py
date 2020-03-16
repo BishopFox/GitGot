@@ -128,10 +128,16 @@ def should_parse(repo, state, is_gist=False):
                     "({}% Similarity)".format(similarity) +
                     bcolors.ENDC)
                 return False
-    except github.UnknownObjectException:
+    except github.UnknownObjectException as e:
         print(
             bcolors.FAIL +
-            "API Error: File no longer exists on github.com" +
+            "API Error: " + e +
+            bcolors.ENDC)
+        return False
+    except github.GithubException:
+        print(
+            bcolors.FAIL +
+            "API Error: File too big for API request, can't retreive file superior to 1 Mb." +
             bcolors.ENDC)
         return False
     return True
