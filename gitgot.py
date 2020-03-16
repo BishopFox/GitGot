@@ -335,7 +335,16 @@ def github_search(g, state):
 
                     repo = repositories[i]
 
-                    log_buf = "https://github.com/" + \
+
+                    # Setting domain/scheme name for log output
+                    scheme = g._Github__requester._Requester__scheme
+                    domain = g._Github__requester._Requester__hostname
+
+                    if(domain == "api.github.com"):
+                        domain = "github.com"
+
+                    log_buf = scheme + "://" + \
+                        domain + "/" + \
                         bcolors.OKGREEN + repo.repository.owner.login + "/" + \
                         bcolors.OKBLUE + repo.repository.name + "/blob" + \
                         bcolors.ENDC + \
@@ -446,6 +455,11 @@ def main():
         "--recover",
         help="Name of recovery file",
         type=str)
+    parser.add_argument(
+        "-u",
+        "--url",
+        help="URL of self-hosted GitHub instance (e.g., https://git.example.com)",
+        type=str)
     args = parser.parse_args()
 
     state = State()
@@ -488,7 +502,12 @@ def main():
     # Load/Validate RegEx Checks
     state = regex_validator(args, state)
 
-    g = github.Github(ACCESS_TOKEN)
+    if args.url:
+        g = github.Github(base_url=args.url + "/api/v3",
+                          login_or_token=ACCESS_TOKEN)
+    else:
+        g = github.Github(ACCESS_TOKEN)
+
 
     if state.is_gist:
         gist_search(g, state)
