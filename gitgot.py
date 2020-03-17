@@ -48,6 +48,7 @@ class State:
                  query=None,
                  logfile="",
                  is_gist=False,
+                 line_numbers=False,
                  ):
         self.bad_users = bad_users
         self.bad_repos = bad_repos
@@ -60,6 +61,7 @@ class State:
         self.query = query
         self.logfile = logfile
         self.is_gist = is_gist
+        self.line_numbers = line_numbers
 
 
 def save_state(name, state):
@@ -71,23 +73,33 @@ def save_state(name, state):
     print("Saved as [{}]".format(filename))
 
 
-def regex_search(checks, repo):
+def regex_search(checks, repo, print_lines):
     output = ""
-    for line in repo.decoded_content.splitlines():
-        for check in checks:
-            try:
-                line = line.decode('utf-8')
-            except AttributeError:
-                pass
+    lines = repo.decoded_content.splitlines()
 
+    for i in range(len(lines)):
+        line = lines[i]
+        try:
+            line = line.decode('utf-8')
+        except AttributeError:
+            pass
+
+        for check in checks:
             try:
                 (line, inst) = re.subn(
                     check,
                     bcolors.BOLD + bcolors.OKBLUE + r'\1' + bcolors.ENDC,
                     line)
                 if inst > 0:
-                    output += "\t" + line + "\n"
-                    print("\t", line)
+                    # Line number printing support
+                    line_str = ""
+                    if print_lines:
+                        line_str = bcolors.WARNING + str(i+1) + \
+                                   ":" + bcolors.ENDC
+
+                    output += line_str + "\t" + line + "\n"
+                    print(line_str + "\t" + line)
+
                     break
             except Exception as e:
                 print(
@@ -181,7 +193,7 @@ def regex_handler(choice, repo):
         return ""
     else:
         print(bcolors.HEADER + "Searching: " + choice[1:] + bcolors.ENDC)
-        return regex_search([choice[1:]], repo)
+        return regex_search([choice[1:]], repo, False)
 
 
 def ui_loop(repo, log_buf, state, is_gist=False):
@@ -292,7 +304,7 @@ def gist_search(g, state):
 
             if should_parse(gist, state, is_gist=True) or stepBack:
                 stepBack = False
-                log_buf += regex_search(state.checks, gist)
+                log_buf += regex_search(state.checks, gist, state.line_numbers)
                 ui_loop(gist, log_buf, state, is_gist=True)
                 if state.index < i:
                     i = state.index
@@ -351,7 +363,8 @@ def github_search(g, state):
 
                     if should_parse(repo, state) or stepBack:
                         stepBack = False
-                        log_buf += regex_search(state.checks, repo)
+                        log_buf += regex_search(state.checks, repo,
+                                                state.line_numbers)
                         ui_loop(repo, log_buf, state)
                         if state.index < i:
                             i = state.index
@@ -431,9 +444,13 @@ def main():
         type=str,
         required=True)
     parser.add_argument(
+        "--line-numbers",
+        help="Print line numbers",
+        action="store_true")
+    parser.add_argument(
         "--gist",
         help="Search GitHub Gists instead",
-        action='store_true',
+        action="store_true",
         required=False)
     parser.add_argument(
         "-f",
@@ -480,6 +497,8 @@ def main():
         state.index = 0
 
     state.is_gist = state.is_gist or (args.gist and not state.is_gist)
+    state.line_numbers = state.line_numbers or \
+        (args.line_numbers and not state.line_numbers)
 
     if args.output:
         state.logfile = args.output
