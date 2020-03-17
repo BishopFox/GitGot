@@ -73,6 +73,7 @@ def save_state(name, state):
 
 def regex_search(checks, repo):
     output = ""
+    line_id = 1
     for line in repo.decoded_content.splitlines():
         for check in checks:
             try:
@@ -86,14 +87,15 @@ def regex_search(checks, repo):
                     bcolors.BOLD + bcolors.OKBLUE + r'\1' + bcolors.ENDC,
                     line)
                 if inst > 0:
-                    output += "\t" + line + "\n"
-                    print("\t", line)
+                    output += str(line_id) + ":\t" + line + "\n"
+                    print(line_id, ":\t", line)
                     break
             except Exception as e:
                 print(
                     bcolors.FAIL + "ERROR: ", e, bcolors.ENDC,
                     bcolors.WARNING, "\nCHECK: ", check, bcolors.ENDC,
                     "\nLINE: ", line)
+        line_id += 1
     print(bcolors.HEADER + "End of Matches" + bcolors.ENDC)
     return output
 
