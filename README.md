@@ -33,7 +33,7 @@ Read more about the semi-automated, human-in-the-loop design here: https://know.
 
 Ubuntu/Debian (or equivalent for your distro):
 ```sh
-apt-get install libfuzzy-dev ssdeep
+apt-get install python3-dev libfuzzy-dev ssdeep
 ```
 
 or, for Mac OSX:
@@ -71,7 +71,7 @@ After adding the token, you are ready to go:
 ```sh
 # Default RegEx list and logfile location (/logs/<query>.log) are used when no others are specified.
 
-# Query for the string "example.com" using default GitHub search behavior (i.e., tokenization). 
+# Query for the string "example.com" using default GitHub search behavior (i.e., tokenization).
 # This will find com.example (e.g., Java) or example.com (Website)
 ./gitgot.py -q example.com
 
