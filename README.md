@@ -29,11 +29,11 @@ Read more about the semi-automated, human-in-the-loop design here: https://know.
 
 ### Manual Instructions
 
-[1] Install the `ssdeep` dependency for fuzzy hashing.
+[1] Install the `python3-dev` and `ssdeep` dependency for fuzzy hashing.
 
 Ubuntu/Debian (or equivalent for your distro):
 ```sh
-apt-get install libfuzzy-dev ssdeep
+apt-get install python3-dev libfuzzy-dev ssdeep
 ```
 
 or, for Mac OSX:
