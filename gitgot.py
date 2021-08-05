@@ -75,13 +75,16 @@ def save_state(name, state):
 
 def regex_search(checks, repo, print_lines):
     output = ""
-    lines = repo.decoded_content.splitlines()
+    try:
+        lines = repo.decoded_content.splitlines()
+    except:
+        lines = []
 
     for i in range(len(lines)):
         line = lines[i]
         try:
             line = line.decode('utf-8')
-        except AttributeError:
+        except:
             pass
 
         for check in checks:
@@ -141,7 +144,7 @@ def should_parse(repo, state, is_gist=False):
                     bcolors.ENDC)
                 return False
     except github.GithubException as e:
-        print(bcolors.FAIL + "API ERROR: " + e + bcolors.ENDC)
+        print(bcolors.FAIL + "API ERROR: " + str(e) + bcolors.ENDC)
     return True
 
 
