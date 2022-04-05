@@ -141,7 +141,8 @@ def should_parse(repo, state, is_gist=False):
                     bcolors.ENDC)
                 return False
     except github.GithubException as e:
-        print(bcolors.FAIL + "API ERROR: " + e + bcolors.ENDC)
+        print(bcolors.FAIL + "API ERROR: {}".format(e) + bcolors.ENDC)
+        return False
     return True
 
 
