@@ -15,7 +15,7 @@ import urllib.parse
 
 
 SIMILARITY_THRESHOLD = 65
-ACCESS_TOKEN = "<NO-PERMISSION-GITHUB-TOKEN-HERE>"
+ACCESS_TOKEN = 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
 GITHUB_WHITESPACE = "\\.|,|:|;|/|\\\\|`|'|\"|=|\\*|!|\\?" \
                     "|\\#|\\$|\\&|\\+|\\^|\\||\\~|<|>|\\(" \
                     "|\\)|\\{|\\}|\\[|\\]| "
