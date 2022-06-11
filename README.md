@@ -23,7 +23,7 @@ During search sessions, users will provide feedback to GitGot about search resul
 Blacklists generated from previous sessions can be saved and reused against similar queries (e.g.,
 `example.com` v.s. `subdomain.example.com` v.s. `Example Org`). Sessions can also be paused and resumed at any time.
 
-Read more about the semi-automated, human-in-the-loop design here: https://know.bishopfox.com/blog/going-semi-automated-in-an-automated-world-using-human-in-the-loop-workflows-to-improve-our-security-tools
+Read more about the semi-automated, human-in-the-loop design here: https://bishopfox.com/blog/semi-automated-vs-automated-security-tools.
 
 ## Install Instructions
 
