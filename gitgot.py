@@ -124,12 +124,6 @@ def should_parse(repo, state, is_gist=False):
 
     # Fuzzy Hash Comparison
     try:
-        if not is_gist:
-            # Temporary fix for PyGithub until fixed upstream (PyGithub#1178)
-            repo._url.value = repo._url.value.replace(
-                repo._path.value,
-                urllib.parse.quote(repo._path.value))
-
         candidate_sig = ssdeep.hash(repo.decoded_content)
         for sig in state.bad_signatures:
             similarity = ssdeep.compare(candidate_sig, sig)
